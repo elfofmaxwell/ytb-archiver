@@ -57,8 +57,10 @@ def main():
     video_info_list_old = []
     meet_old_video = False
     # load existed video list 
-    if os.path.isfile("%s_list.json" % channel_id): 
-        with open("%s_list.json" % channel_id) as f: 
+    if not os.path.isdir("video_lists"): 
+        os.mkdir("video_lists")
+    if os.path.isfile(os.path.join("video_lists", "%s_list.json" % channel_id)): 
+        with open(os.path.join("video_lists", "%s_list.json" % channel_id)) as f: 
             video_info_list_old = json.load(f)
 
     try: 
@@ -97,7 +99,7 @@ def main():
     video_info_list = video_info_list+video_info_list_old
 
     # save list as json file 
-    with open('%s_list.json' % channel_id, 'w') as f: 
+    with open(os.path.join("video_lists", "%s_list.json" % channel_id), 'w') as f: 
         json.dump(video_info_list, f)
     
 

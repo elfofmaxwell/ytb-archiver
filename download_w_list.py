@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*-
+
 import os
 import sys
 import json
@@ -44,7 +46,7 @@ def new_checkpoint(current_index, video_info_list, old_check_point, channel_id):
     else: 
         download_check_point['videoId'] = video_info_list[current_index]['videoId']
         download_check_point['videoTitle'] = video_info_list[current_index]['title']
-    with open('%s_checkpoint.json' % channel_id, 'w') as f: 
+    with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id), 'w') as f: 
         json.dump(download_check_point, f)
 
 # ask whether continue download after a video has been finished
@@ -60,10 +62,10 @@ def ask_continue(current_video_title: str)->str:
 
 # manually change pointer of checkpoint, note the index in checkpoint file is count from the end of video list, starting at 0
 def edit_checkpoint(channel_id: str): 
-    with open("%s_list.json" % channel_id) as f: 
+    with open(os.path.join('download_logs', "%s_list.json" % channel_id)) as f: 
         video_info_list = json.load(f)
     if os.path.isfile('%s_checkpoint.json' % channel_id): 
-        with open("%s_checkpoint.json" % channel_id) as f: 
+        with open(os.path.join('download_logs', "%s_checkpoint.json" % channel_id)) as f: 
             old_check_point = json.load(f)
     else: 
         raise NameError('No checkpoint file')
@@ -103,13 +105,17 @@ def init_checkpoint(channel_id):
         'videoTitle': '',
         'download_path': download_path
         }
-    with open('%s_checkpoint.json' % channel_id, 'w') as f: 
+    with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id), 'w') as f: 
         json.dump(download_check_point, f)
 
 
 def main(): 
     channel_id = sys.argv[1]
     
+    logfile_dir = 'download_logs'
+    if not os.path.isdir(logfile_dir): 
+        os.makedirs(logfile_dir)
+
     # predefine download path
     if '--init-checkpoint' in sys.argv: 
         init_checkpoint(channel_id)
@@ -136,18 +142,18 @@ def main():
         except IndexError: 
             log_append = False
         if log_append: 
-            with open('%s_download.log' % channel_id, "a") as f: 
+            with open(os.path.join('download_logs', '%s_download.log' % channel_id), "a") as f: 
                 f.write(str(datetime.datetime.today())+' Process begin\n')
         else: 
-            with open('%s_download.log' % channel_id, 'w') as f: 
+            with open(os.path.join('download_logs', '%s_download.log' % channel_id), 'w') as f: 
                 f.write(str(datetime.datetime.today())+' Process begin\n')
     
-    with open('%s_list.json' % channel_id) as f: 
+    with open(os.path.join('download_logs', '%s_list.json' % channel_id)) as f: 
         video_info_list = json.load(f)
     
     # load checkpoint file, if none existing, create one using working path as download path
     if os.path.isfile('%s_checkpoint.json' % channel_id): 
-        with open('%s_checkpoint.json' % channel_id) as f: 
+        with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)) as f: 
             download_check_point = json.load(f)
     else: 
         download_check_point = {
@@ -199,7 +205,7 @@ def main():
                     print(completed_dlp.stdout.decode('utf-8'), completed_dlp.stderr.decode('utf-8'))
                     dlp_out = current_video_id+' on '+current_video_date+': '+''.join((completed_dlp.stdout.decode('utf-8'), completed_dlp.stderr.decode('utf-8'))).rstrip()+'\n'
                     if "--log" in sys.argv: 
-                        with open('%s_download.log' % channel_id, 'a') as f: 
+                        with open(os.path.join('download_logs', '%s_download.log' % channel_id), 'a') as f: 
                             f.write(dlp_out)
 
                     # keep download if in automatic mode, or ask whether to continue if not automatic mode
