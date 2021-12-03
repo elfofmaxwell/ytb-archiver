@@ -62,7 +62,7 @@ def ask_continue(current_video_title: str)->str:
 
 # manually change pointer of checkpoint, note the index in checkpoint file is count from the end of video list, starting at 0
 def edit_checkpoint(channel_id: str): 
-    with open(os.path.join('download_logs', "%s_list.json" % channel_id)) as f: 
+    with open(os.path.join('video_lists', "%s_list.json" % channel_id)) as f: 
         video_info_list = json.load(f)
     if os.path.isfile('%s_checkpoint.json' % channel_id): 
         with open(os.path.join('download_logs', "%s_checkpoint.json" % channel_id)) as f: 
@@ -148,7 +148,7 @@ def main():
             with open(os.path.join('download_logs', '%s_download.log' % channel_id), 'w') as f: 
                 f.write(str(datetime.datetime.today())+' Process begin\n')
     
-    with open(os.path.join('download_logs', '%s_list.json' % channel_id)) as f: 
+    with open(os.path.join('video_lists', '%s_list.json' % channel_id)) as f: 
         video_info_list = json.load(f)
     
     # load checkpoint file, if none existing, create one using working path as download path

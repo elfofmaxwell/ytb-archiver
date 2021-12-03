@@ -80,7 +80,7 @@ def main():
     channel_id = sys.argv[1]
     
     # from checkpoint file get download path and current index
-    with open('%s_checkpoint.json' % channel_id) as f: 
+    with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)) as f: 
         download_checkpoint = json.load(f)
     current_path = download_checkpoint['download_path']
     current_index = download_checkpoint['index']
@@ -91,8 +91,9 @@ def main():
     loc_id_num_list_sorted = [str2num(vid) for vid in loc_id_list_sorted]
     
     # get video info list ID's and sort
-    with open('%s_list.json' % channel_id) as f: 
+    with open(os.path.join('video_lists', '%s_list.json' % channel_id)) as f: 
         video_list = json.load(f)
+    video_list.reverse()
     list_id_list = [single_video['videoId'] for single_video in video_list[:current_index]]
     list_id_list_sorted = sorted(list_id_list, key=str2num)
     sort_info = lambda info_dict: str2num(info_dict['videoId'])
@@ -111,7 +112,7 @@ def main():
 
     log_str = 'List unique: \n'+list_unique_info_str+'\n\nLocal unique: \n'+loc_unique_vid_str
 
-    with open('%s_diff.list'%channel_id, 'w') as f: 
+    with open(os.path.join('download_logs', '%s_diff.list'%channel_id), 'w') as f: 
         f.write(log_str)
 
     
