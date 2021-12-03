@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 refresh_token.json
 suisei_video_extractor.json
+.DS_Store

@@ -12,8 +12,8 @@ import datetime
 Usage: first argument must be channel id, 
 possible options: 
     --edit-checkpoint: manually move pointer of checkpoint to a certain video
-    --init-checkpoint: pre-define a download path for a channel
-    --log: save download errors in <channel_id>_download.log, parameter: append [not clear previous log]
+    --init-checkpoint: pre-define a download path for a channel, parameter (optional): project download path
+    --log: save download errors in <channel_id>_download.log, parameter (optional): append [not clear previous log]
     --slow: slow mode, stop around 10 min every video finished during automatic mode
     -q: quiet mode, do not ask about path at beginning
     -y: automatic mode, automatic go over the list without asking continue or not
@@ -97,8 +97,9 @@ def edit_checkpoint(channel_id: str):
     return 0
     
 # predefine download path for a channel
-def init_checkpoint(channel_id):
-    download_path = input('Please enter download path: ')
+def init_checkpoint(channel_id, download_path=''):
+    if not download_path: 
+        download_path = input('Please enter download path: ')
     download_check_point = {
         'index': 0, 
         'videoId': '', 
@@ -118,7 +119,13 @@ def main():
 
     # predefine download path
     if '--init-checkpoint' in sys.argv: 
-        init_checkpoint(channel_id)
+        arg_pos = sys.argv.index('--init-checkpoint')
+        try: 
+            if os.path.isdir(sys.argv[arg_pos+1]): 
+                init_path = sys.argv[arg_pos+1] 
+        except IndexError: 
+            init_path = ''
+        init_checkpoint(channel_id, init_path)
     
     # manually edit checkpoint
     if '--edit-checkpoint' in sys.argv: 
