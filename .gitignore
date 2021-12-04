@@ -130,3 +130,4 @@ dmypy.json
 refresh_token.json
 secrets.json
 .DS_Store
+.vscode/
