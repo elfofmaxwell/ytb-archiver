@@ -72,7 +72,7 @@ def get_downloaded_id(scan_path: str)->list:
                         if latter_part[0] == '.': 
                             hidden_flag = True
                             break
-                    if former_part == '/': 
+                    if former_part in ('/', '.', ''): 
                         break
                 if not hidden_flag: 
                     fname_list.append(os.path.splitext(fname)[0])
