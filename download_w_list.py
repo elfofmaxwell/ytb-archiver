@@ -223,7 +223,7 @@ def main():
                             arg_slow_pos = sys.argv.index("--slow")
                             if arg_slow_pos < len(sys.argv)-1: 
                                 try: 
-                                    sleep_time = float(sys.argv[arg_slow_pos+1])
+                                    sleep_time = int(sys.argv[arg_slow_pos+1])
                                 except ValueError: 
                                     sleep_time = 600
                             else: 
