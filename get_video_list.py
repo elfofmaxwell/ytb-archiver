@@ -1,5 +1,10 @@
 # -*- coding: utf8 -*-
 
+'''
+A tool to get video list from a channel. 
+Argument: channel ID
+'''
+
 import os
 import sys
 import json
@@ -33,7 +38,7 @@ def main():
     # set api credentials
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = "suisei_video_extractor.json"
+    client_secrets_file = "secrets.json"
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
     # if no refresh token, request brand new token set
     if not os.path.isfile('refresh_token.json'): 
@@ -42,7 +47,7 @@ def main():
             json.dump(credentials.refresh_token, f)
     # if there is refresh token, use it to get new access token
     else: 
-        with open('suisei_video_extractor.json') as f: 
+        with open(client_secrets_file) as f: 
             client_info = json.load(f)
         client_id = client_info["installed"]["client_id"]
         with open('refresh_token.json') as f: 

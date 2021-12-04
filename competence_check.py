@@ -3,6 +3,9 @@
 '''
 A tool to check whether local videoID's match video info list ID's
 argument: channel ID
+optional arguments after channel ID: 
+    start index
+    end index
 '''
 
 import os
@@ -78,6 +81,12 @@ def get_downloaded_id(scan_path: str)->list:
 
 def main(): 
     channel_id = sys.argv[1]
+    start_index = 0
+    end_index = 0
+    if len(sys.argv) >= 3: 
+        start_index = int(sys.argv[2])
+    if len(sys.argv) >= 4: 
+        end_index = int(sys.argv[3])
     
     # from checkpoint file get download path and current index
     with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)) as f: 
@@ -94,7 +103,9 @@ def main():
     with open(os.path.join('video_lists', '%s_list.json' % channel_id)) as f: 
         video_list = json.load(f)
     video_list.reverse()
-    list_id_list = [single_video['videoId'] for single_video in video_list[:current_index]]
+    if not end_index: 
+        end_index = current_index
+    list_id_list = [single_video['videoId'] for single_video in video_list[start_index:end_index]]
     list_id_list_sorted = sorted(list_id_list, key=str2num)
     sort_info = lambda info_dict: str2num(info_dict['videoId'])
     list_info_sorted = sorted(video_list, key=sort_info)
@@ -104,6 +115,8 @@ def main():
     loc_unique_i, list_unique_i = compare_list(loc_id_num_list_sorted, list_id_num_list_sorted)
     loc_unique_vid = [loc_id_list_sorted[i] for i in loc_unique_i]
     list_unique_vid = [list_id_list_sorted[i] for i in list_unique_i]
+    with open(os.path.join('download_logs', '%s_diff.json'%channel_id), 'w') as f: 
+        json.dump(list_unique_vid, f)
     
     # format output string
     list_unique_info = ['Date: %s, ID: %s'%(list_info_sorted[i]['date'], list_id_list_sorted[i]) for i in list_unique_i]

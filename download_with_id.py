@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+'''
+A tool to download videos with id
+'''
+
 import subprocess
 import time
 import os

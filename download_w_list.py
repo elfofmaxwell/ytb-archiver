@@ -13,8 +13,8 @@ Usage: first argument must be channel id,
 possible options: 
     --edit-checkpoint: manually move pointer of checkpoint to a certain video
     --init-checkpoint: pre-define a download path for a channel, parameter (optional): project download path
-    --log: save download errors in <channel_id>_download.log, parameter (optional): append [not clear previous log]
-    --slow: slow mode, stop around 10 min every video finished during automatic mode
+    --log: save download errors in <channel_id>_download.log, parameter (optional): "append" [not clear previous log]
+    --slow: slow mode, in default sleep around 10 min every video finished during automatic mode, parameter (optional): sleep time
     -q: quiet mode, do not ask about path at beginning
     -y: automatic mode, automatic go over the list without asking continue or not
 '''
@@ -64,7 +64,7 @@ def ask_continue(current_video_title: str)->str:
 def edit_checkpoint(channel_id: str): 
     with open(os.path.join('video_lists', "%s_list.json" % channel_id)) as f: 
         video_info_list = json.load(f)
-    if os.path.isfile('%s_checkpoint.json' % channel_id): 
+    if os.path.isfile(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)): 
         with open(os.path.join('download_logs', "%s_checkpoint.json" % channel_id)) as f: 
             old_check_point = json.load(f)
     else: 
@@ -126,6 +126,7 @@ def main():
         except IndexError: 
             init_path = ''
         init_checkpoint(channel_id, init_path)
+        return 0
     
     # manually edit checkpoint
     if '--edit-checkpoint' in sys.argv: 
@@ -159,7 +160,7 @@ def main():
         video_info_list = json.load(f)
     
     # load checkpoint file, if none existing, create one using working path as download path
-    if os.path.isfile('%s_checkpoint.json' % channel_id): 
+    if os.path.isfile(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)): 
         with open(os.path.join('download_logs', '%s_checkpoint.json' % channel_id)) as f: 
             download_check_point = json.load(f)
     else: 
@@ -192,7 +193,7 @@ def main():
                 current_video = video_info_list[-current_index-1]
                 current_video_id = current_video["videoId"]
                 current_video_title = current_video["title"]
-                current_video_date = current_video["date"].strip('-')
+                current_video_date = current_video["date"]
                 current_video_folder = DirChain(current_path).downloads(channel_id).by_upload_date(current_video_date)._path
 
                 try: 
@@ -219,8 +220,16 @@ def main():
                     if '-y' in sys.argv: 
                         print('Video %s, %s on %s has been finished. '%(current_video_id, current_video_title, current_video_date))
                         if '--slow' in sys.argv: 
+                            arg_slow_pos = sys.argv.index("--slow")
+                            if arg_slow_pos < len(sys.argv)-1: 
+                                try: 
+                                    sleep_time = float(sys.argv[arg_slow_pos+1])
+                                except ValueError: 
+                                    sleep_time = 600
+                            else: 
+                                sleep_time = 600
                             # sleep in slow mode
-                            sleep_length = random.randint(500, 700)
+                            sleep_length = random.randint(sleep_time-0.1*sleep_time, sleep_time+0.1*sleep_time)
                             for i in range(sleep_length):
                                 try: 
                                     time.sleep(1)

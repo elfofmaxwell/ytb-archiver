@@ -128,5 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 refresh_token.json
-suisei_video_extractor.json
+secrets.json
 .DS_Store
