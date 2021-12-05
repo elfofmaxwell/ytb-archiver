@@ -121,8 +121,7 @@ def main():
     if '--init-checkpoint' in sys.argv: 
         arg_pos = sys.argv.index('--init-checkpoint')
         try: 
-            if os.path.isdir(sys.argv[arg_pos+1]): 
-                init_path = sys.argv[arg_pos+1] 
+            init_path = sys.argv[arg_pos+1] 
         except IndexError: 
             init_path = ''
         init_checkpoint(channel_id, init_path)
