@@ -47,6 +47,18 @@ def change_download_path(new_path, channel_id, auto_create=False):
         return 1
 
 
+def ensure_checkpoint(channel_id, project_config): 
+    checkpoint_path = os.path.join('download_logs', '%s_checkpoint.json'%channel_id)
+    if not os.path.isfile(checkpoint_path): 
+        init_args = [
+            'python', 
+            'download_w_list.py', 
+            channel_id, 
+            '--init-checkpoint', 
+            project_config['download_path']
+        ]
+        subprocess.run(init_args)
+
 def download_cycle(channel_id: str, project_config: dict): 
     print("Start working on %s..."%channel_id)
     checkpoint_path = os.path.join('download_logs', '%s_checkpoint.json'%channel_id)
@@ -167,24 +179,15 @@ def main():
             if len(sys.argv) == 2: 
                 # go over channels in the list defined in config
                 for channel_id in project_config['channel_id']: 
+                    ensure_checkpoint(channel_id, project_config)
                     change_download_path(project_config['download_path'], channel_id, auto_create=True)
                     download_cycle(channel_id, project_config)
                 return 0
             if len(sys.argv) == 3: 
                 # download contents of a single channel
                 channel_id = sys.argv[2]
-                checkpoint_path = os.path.join('download_logs', '%s_checkpoint.json'%channel_id)
-                if os.path.isfile(checkpoint_path): 
-                    change_download_path(project_config['download_path'], channel_id, auto_create=True)
-                else: 
-                    init_args = [
-                        'python', 
-                        'download_w_list.py', 
-                        channel_id, 
-                        '--init-checkpoint', 
-                        project_config['download_path']
-                    ]
-                    subprocess.run(init_args)
+                ensure_checkpoint(channel_id, project_config)
+                change_download_path(project_config['download_path'], channel_id, auto_create=True)
                 download_cycle(channel_id, project_config)
                 return 0
         except KeyboardInterrupt: 
