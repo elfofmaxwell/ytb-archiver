@@ -20,7 +20,7 @@ import time
 
 # manually change download path
 def change_download_path(new_path, channel_id, auto_create=False): 
-    checkpoint_path = os.path.join('downlaod_logs', '%s_checkpoint.json'%channel_id)
+    checkpoint_path = os.path.join('download_logs', '%s_checkpoint.json'%channel_id)
     if os.path.isfile(checkpoint_path): 
         with open(checkpoint_path) as f: 
             download_checkpoint = json.load(f)

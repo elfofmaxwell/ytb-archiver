@@ -131,3 +131,4 @@ refresh_token.json
 secrets.json
 .DS_Store
 .vscode/
+config.json

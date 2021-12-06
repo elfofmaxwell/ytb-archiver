@@ -21,6 +21,11 @@ def str2num(input_str: str)->int:
 
 # a function to find out index of unique elements of two lists (May be clearer to use set? )
 def compare_list(sorted_list_1: list, sorted_list_2: list)->tuple: 
+    if not sorted_list_1: 
+        return tuple(), tuple(sorted_list_2)
+    elif not sorted_list_2: 
+        return tuple(sorted_list_1), tuple()
+    
     if len(sorted_list_1)<len(sorted_list_2): 
         short_list = sorted_list_1
         long_list = sorted_list_2
@@ -50,11 +55,12 @@ def compare_list(sorted_list_1: list, sorted_list_2: list)->tuple:
         long_list_unique += list(range(long_list_i, len(long_list)))
     if short_list_i < len(short_list): 
         short_list_unique += list(range(short_list_i, len(short_list)))
-    
+    short_unique_itmes = [short_list[i] for i in short_list_unique]
+    long_unique_items = [long_list[i] for i in long_list_unique]
     if switch_flag: 
-        return tuple(short_list_unique), tuple(long_list_unique)
+        return tuple(short_unique_itmes), tuple(long_unique_items)
     else: 
-        return tuple(long_list_unique), tuple(short_list_unique)
+        return tuple(long_unique_items), tuple(short_unique_itmes)
 
 # get video id from local downloaded webm files
 def get_downloaded_id(scan_path: str)->list: 
@@ -112,9 +118,8 @@ def main():
     list_id_num_list_sorted = [str2num(vid) for vid in list_id_list_sorted]
     
     # get unique videoID's for local and info list respectively
-    loc_unique_i, list_unique_i = compare_list(loc_id_num_list_sorted, list_id_num_list_sorted)
-    loc_unique_vid = [loc_id_list_sorted[i] for i in loc_unique_i]
-    list_unique_vid = [list_id_list_sorted[i] for i in list_unique_i]
+    loc_unique_vid, list_unique_vid = compare_list(loc_id_num_list_sorted, list_id_num_list_sorted)
+
     with open(os.path.join('download_logs', '%s_diff.json'%channel_id), 'w') as f: 
         json.dump(list_unique_vid, f)
     
