@@ -48,6 +48,7 @@ def change_download_path(new_path, channel_id, auto_create=False):
 
 
 def download_cycle(channel_id: str, project_config: dict): 
+    print("Start working on %s..."%channel_id)
     checkpoint_path = os.path.join('download_logs', '%s_checkpoint.json'%channel_id)
     # prepare start index for competence check
     if os.path.isfile(checkpoint_path): 
