@@ -22,9 +22,9 @@ def str2num(input_str: str)->int:
 # a function to find out index of unique elements of two lists (May be clearer to use set? )
 def compare_list(sorted_list_1: list, sorted_list_2: list)->tuple: 
     if not sorted_list_1: 
-        return tuple(), tuple(sorted_list_2)
+        return tuple(), tuple(range(len(sorted_list_2)))
     elif not sorted_list_2: 
-        return tuple(sorted_list_1), tuple()
+        return tuple(range(len(sorted_list_1))), tuple()
     
     if len(sorted_list_1)<len(sorted_list_2): 
         short_list = sorted_list_1
@@ -130,7 +130,7 @@ def main():
     list_unique_info_str = '\n'.join(list_unique_info)
     loc_unique_vid_str = '\n'.join(loc_unique_vid)
 
-    log_str = 'List unique: \n'+list_unique_info_str+'\n\nLocal unique: \n'+loc_unique_vid_str
+    log_str = 'List unique: \n'+list_unique_info_str
 
     with open(os.path.join('download_logs', '%s_diff.list'%channel_id), 'w') as f: 
         f.write(log_str)
