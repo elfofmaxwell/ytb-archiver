@@ -124,7 +124,8 @@ def main():
         json.dump(list_unique_vid, f)
     
     # format output string
-    list_unique_info = ['Date: %s, ID: %s'%(list_info_sorted[i]['date'], list_id_list_sorted[i]) for i in list_unique_i]
+    list_unique_info = ['Date: %s, ID: %s'%(info['date'], info['videoID'])\
+         for info in list_info_sorted if info['videoID'] in list_unique_vid]
     list_unique_info_str = '\n'.join(list_unique_info)
     loc_unique_vid_str = '\n'.join(loc_unique_vid)
 
