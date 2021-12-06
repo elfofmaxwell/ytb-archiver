@@ -25,6 +25,8 @@ def main():
                 project_path = download_checkpoint['download_path']
                 download_path = DirChain(project_path).downloads(new_path).by_upload_date._path
                 break
+        else: 
+            break
     continue_flag = 'y'
     while continue_flag in ['y', 'r']: 
         if continue_flag == 'y': 
