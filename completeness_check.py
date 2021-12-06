@@ -105,11 +105,12 @@ def main():
     
     # get video info list ID's and sort
     with open(os.path.join('video_lists', '%s_list.json' % channel_id)) as f: 
-        video_list = json.load(f)
-    video_list.reverse()
+        video_list_raw = json.load(f)
+    video_list_raw.reverse()
     if not end_index: 
         end_index = current_index
-    list_id_list = [single_video['videoId'] for single_video in video_list[start_index:end_index]]
+    video_list = video_list_raw[start_index:end_index]
+    list_id_list = [single_video['videoId'] for single_video in video_list]
     list_id_list_sorted = sorted(list_id_list, key=str2num)
     sort_info = lambda info_dict: str2num(info_dict['videoId'])
     list_info_sorted = sorted(video_list, key=sort_info)
