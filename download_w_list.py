@@ -204,7 +204,6 @@ def main():
                         'yt-dlp', 
                         '--quiet', 
                         '--path', current_video_folder, 
-                        '--output', current_video_title.replace('/', '|')+' ['+current_video_id+']', 
                         current_video_url
                     ]
                     # run yt-dlp and display messages, save log if log option is on
