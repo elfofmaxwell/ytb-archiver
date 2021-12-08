@@ -38,9 +38,9 @@ def change_download_path(new_path, channel_id, auto_create=False):
                         print("Invalid input! Try again")
             else: 
                 os.makedirs(new_path)
-            download_checkpoint['download_path'] = new_path
-            with open(checkpoint_path, 'w') as f: 
-                json.dump(download_checkpoint, f)
+        download_checkpoint['download_path'] = new_path
+        with open(checkpoint_path, 'w') as f: 
+            json.dump(download_checkpoint, f)
             return 0
     else: 
         print("No existing config! Please initialize")
