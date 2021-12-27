@@ -39,6 +39,7 @@ def main():
                             download_path, 
                             '-o', 
                             '%(upload_date>%Y-%m-%d)s/%(title)s [%(id)s].%(ext)s', 
+                            '-f bv+ba/b', 
                             video_url
                         ]
             subprocess.run(dlp_args)
