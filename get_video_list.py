@@ -54,6 +54,8 @@ def main():
             refresh_token = json.load(f)
         flow.oauth2session.refresh_token(flow.client_config['token_uri'], refresh_token=refresh_token, client_id=client_id, client_secret=flow.client_config['client_secret'])
         credentials = google_auth_oauthlib.helpers.credentials_from_session(flow.oauth2session, flow.client_config)
+        with open('refresh_token.json', 'w') as f: 
+            json.dump(credentials.refresh_token, f)
     # create api client
     youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)
     
