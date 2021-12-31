@@ -204,6 +204,7 @@ def main():
                         'yt-dlp', 
                         '--quiet', 
                         '--path', current_video_folder, 
+                        '-f webm', 
                         current_video_url
                     ]
                     # run yt-dlp and display messages, save log if log option is on
