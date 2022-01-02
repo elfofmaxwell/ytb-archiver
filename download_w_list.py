@@ -206,7 +206,7 @@ def main():
                         '--path', current_video_folder, 
                     ]
                     if os.path.isfile("cookie.txt"): 
-                        dlp_args.append('-c %s'%'cookie.txt')
+                        dlp_args.append('--cookies %s'%'cookies.txt')
                     dlp_args.append(current_video_url)
                     # run yt-dlp and display messages, save log if log option is on
                     completed_dlp = subprocess.run(dlp_args, capture_output=True)
