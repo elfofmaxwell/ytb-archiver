@@ -204,7 +204,6 @@ def main():
                         'yt-dlp', 
                         '--quiet', 
                         '--path', current_video_folder, 
-                        '-f bv+ba/b', 
                     ]
                     if os.path.isfile("cookie.txt"): 
                         dlp_args.append('--cookies %s'%'cookies.txt')
